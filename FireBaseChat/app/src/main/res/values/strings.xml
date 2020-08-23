@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">FireBaseChat</string>
+    <string name="checkbox_text">Remember password</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up_prompting">Don\'t have an account? Sign up for free!</string>
+    <string name="name_hint">Name</string>
+    <string name="repeat_password_hint">Confirm password</string>
+    <string name="submit">Submit</string>
+    <string name="blank_field">This field is blank</string>
+    <string name="short_password">The password should be at least 6 characters long</string>
+    <string name="passwords_error">Passwords did not match. Please try again</string>
+</resources>

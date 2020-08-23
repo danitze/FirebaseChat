@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EmailSignUpActivity"
+    android:background="@color/backgroundColor">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:translationZ="1dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/relative_layout_background">
+
+        <TextView
+            android:id="@+id/subheadText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:text="@string/sign_up"
+            android:textSize="24sp"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"/>
+
+
+        <EditText
+            android:id="@+id/editTextPersonName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="@string/name_hint"
+            android:inputType="textPersonName"
+            android:layout_below="@id/subheadText"/>
+
+        <EditText
+            android:id="@+id/editTextEmailAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:layout_marginTop="5dp"
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress"
+            android:layout_below="@id/editTextPersonName"/>
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:inputType="textPassword"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:hint="@string/password_hint"
+            android:layout_below="@id/editTextEmailAddress"/>
+
+        <EditText
+            android:id="@+id/editTextRepeatPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:inputType="textPassword"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:hint="@string/repeat_password_hint"
+            android:layout_below="@id/editTextPassword"/>
+
+        <Button
+            android:id="@+id/signUpButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextRepeatPassword"
+            android:text="@string/submit"
+            android:ems="18"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="5dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/beautiful_button"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
