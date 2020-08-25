@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class EmailSignUpActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,8 +27,6 @@ public class EmailSignUpActivity extends AppCompatActivity implements View.OnCli
     private Button signUpButton;
 
     private FirebaseAuth mAuth;
-
-    private final String PATH = "Users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,11 @@ public class EmailSignUpActivity extends AppCompatActivity implements View.OnCli
             editTextEmailAddress.requestFocus();
         }
 
+        else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editTextEmailAddress.setError(getString(R.string.email_error));
+            editTextEmailAddress.requestFocus();
+        }
+
         else if(password.isEmpty()) {
             editTextPassword.setError(getString(R.string.blank_field));
             editTextPassword.requestFocus();
@@ -101,23 +107,22 @@ public class EmailSignUpActivity extends AppCompatActivity implements View.OnCli
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
-                                User user = new User(name, email);
-                                FirebaseDatabase.getInstance().getReference(PATH)
-                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .setValue(user)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                progressBar.setVisibility(View.GONE);
-                                                if(task.isSuccessful()) {
-                                                    Intent intent = new Intent(EmailSignUpActivity.this, MainActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                                else {
-                                                    Toast.makeText(EmailSignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                                }
-                                            }
-                                        });
+                                final FirebaseUser user = mAuth.getCurrentUser();
+                                UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+                                user.updateProfile(changeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        progressBar.setVisibility(View.GONE);
+                                        if(task.isSuccessful()) {
+                                            mAuth.signOut();
+                                            Intent intent = new Intent(EmailSignUpActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                        }
+                                        else {
+                                            Toast.makeText(EmailSignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
                             }
                             else {
                                 Toast.makeText(EmailSignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();

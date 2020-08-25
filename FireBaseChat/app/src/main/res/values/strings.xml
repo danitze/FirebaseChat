@@ -11,6 +11,7 @@
     <string name="repeat_password_hint">Confirm password</string>
     <string name="submit">Submit</string>
     <string name="blank_field">This field is blank</string>
+    <string name="email_error">Email is invalid</string>
     <string name="short_password">The password should be at least 6 characters long</string>
     <string name="passwords_error">Passwords did not match. Please try again</string>
 </resources>
