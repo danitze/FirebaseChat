@@ -6,21 +6,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class ChatListActivity extends AppCompatActivity implements View.OnClickListener {
-    private ListView messageList;
+    private RecyclerView messageList;
     private EditText myMessageText;
     private ImageButton sendMessage;
 
@@ -38,7 +45,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
 
         initialiseDatabase();
         initialiseViews();
-        initialiseAdapter();
+        databaseUpdateListener();
         sendMessage.setOnClickListener(this);
 
     }
@@ -49,32 +56,29 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initialiseViews() {
-        messageList = (ListView) findViewById(R.id.messageList);
+        messageList = (RecyclerView) findViewById(R.id.messageList);
         myMessageText = (EditText) findViewById(R.id.messageText);
         sendMessage = (ImageButton) findViewById(R.id.sendMessage);
     }
 
-    private FirebaseListOptions<Message> setAdapterOptions() {
-        return new FirebaseListOptions.Builder<Message>()
-                .setQuery(myRef, Message.class)
-                .setLayout(R.layout.message_item)
-                .build();
+    private void databaseUpdateListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                showData(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChatListActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    private void initialiseAdapter() {
-        adapter = new FirebaseListAdapter<Message>(setAdapterOptions()) {
-            @Override
-            protected void populateView(@NonNull View v, @NonNull Message model, int position) {
-                TextView messageText = (TextView) v.findViewById(R.id.messageText);
-                TextView nameText = (TextView) v.findViewById(R.id.nameText);
-                TextView dateText = (TextView) v.findViewById(R.id.dateText);
-
-                messageText.setText(model.getMessageText());
-                nameText.setText(model.getMessageUser());
-                dateText.setText(DateFormat.format("yyyy.MM.dd HH:mm:ss", model.getMessageTime()));
-            }
-        };
-        messageList.setAdapter(adapter);
+    private void showData(DataSnapshot snapshot) {
+        for(DataSnapshot ds: snapshot.getChildren()) {
+            Log.d("message", ds.getValue(Message.class).getMessageText());
+        }
     }
 
     @Override

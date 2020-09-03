@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ChatListActivity">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/messageList"
+        tools:listitem="@layout/message_item"
         android:layout_above="@id/sendingLayout" />
 
     <RelativeLayout
