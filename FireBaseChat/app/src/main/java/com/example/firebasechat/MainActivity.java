@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button signInButton;
 
     private CheckBox rememberPassword;
+
+    private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
 
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signInButton = (Button) findViewById(R.id.signInButton);
 
         rememberPassword = (CheckBox) findViewById(R.id.rememberPassword);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     private void setOnClickListeners() {
@@ -170,10 +175,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else {
                 saveData(USER_DATA_FILE, email);
             }
+            progressBar.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressBar.setVisibility(View.GONE);
                             if(task.isSuccessful()) {
                                 Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
                                 startActivity(intent);

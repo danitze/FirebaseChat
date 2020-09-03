@@ -14,4 +14,6 @@
     <string name="email_error">Email is invalid</string>
     <string name="short_password">The password should be at least 6 characters long</string>
     <string name="passwords_error">Passwords did not match. Please try again</string>
+    <string name="message">Your message</string>
+    <string name="send">▶</string>
 </resources>

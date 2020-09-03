@@ -7,6 +7,14 @@
     tools:context=".MainActivity"
     android:background="@color/backgroundColor">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:translationZ="1dp"
+        android:visibility="gone"/>
+
 
     <RelativeLayout
         android:layout_width="wrap_content"
