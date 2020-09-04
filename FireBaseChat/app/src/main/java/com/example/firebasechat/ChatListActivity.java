@@ -2,6 +2,7 @@ package com.example.firebasechat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -24,7 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ChatListActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView messageList;
@@ -34,7 +37,9 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
-    private FirebaseListAdapter<Message> adapter;
+    private MessagesAdapter adapter;
+
+    private boolean myMessage = true;
 
 
     @Override
@@ -44,8 +49,9 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         getSupportActionBar().hide();
 
         initialiseDatabase();
-        initialiseViews();
         databaseUpdateListener();
+        initialiseViews();
+
         sendMessage.setOnClickListener(this);
 
     }
@@ -56,16 +62,27 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initialiseViews() {
-        messageList = (RecyclerView) findViewById(R.id.messageList);
         myMessageText = (EditText) findViewById(R.id.messageText);
         sendMessage = (ImageButton) findViewById(R.id.sendMessage);
+        loadMessageList();
+    }
+
+    private void loadMessageList() {
+        messageList = (RecyclerView) findViewById(R.id.messageList);
+        messageList.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MessagesAdapter();
+        messageList.setAdapter(adapter);
     }
 
     private void databaseUpdateListener() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                showData(snapshot);
+                adapter.setMessages(loadData(snapshot));
+                if(myMessage) {
+                    messageList.getLayoutManager().scrollToPosition(adapter.getItemCount() - 1);
+                    myMessage = false;
+                }
             }
 
             @Override
@@ -75,10 +92,12 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private void showData(DataSnapshot snapshot) {
+    private List<Message> loadData(DataSnapshot snapshot) {
+        List<Message> messages = new ArrayList<Message>();
         for(DataSnapshot ds: snapshot.getChildren()) {
-            Log.d("message", ds.getValue(Message.class).getMessageText());
+            messages.add(ds.getValue(Message.class));
         }
+        return messages;
     }
 
     @Override
@@ -92,8 +111,11 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         }
 
         else {
+            myMessage = true;
+            AuxiliaryActions.hideKeyboard(this);
             myRef.push().setValue(new Message(message, user));
             myMessageText.setText("");
+            messageList.getLayoutManager().scrollToPosition(adapter.getItemCount() - 1);
         }
     }
 }

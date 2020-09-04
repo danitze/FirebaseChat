@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.signInButton:
+                AuxiliaryActions.hideKeyboard(this);
                 signInUser();
                 break;
         }

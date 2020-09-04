@@ -134,6 +134,7 @@ public class EmailSignUpActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) { //Only for sign up button
+        AuxiliaryActions.hideKeyboard(this);
         registerUser();
     }
 }
