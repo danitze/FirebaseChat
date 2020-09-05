@@ -6,5 +6,8 @@
     <color name="backgroundColor">#1C8EF8</color>
     <color name="buttonColor">#167BFF</color>
     <color name="text_color">#415993</color>
+    <color name="myMessageBackgroundColor">#E2FFC7</color>
+    <color name="myMessageTextColor">#5DC452</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
 </resources>

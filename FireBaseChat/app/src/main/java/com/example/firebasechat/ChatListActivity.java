@@ -19,6 +19,7 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +37,8 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
 
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+
+    private FirebaseUser firebaseUser;
 
     private MessagesAdapter adapter;
 
@@ -59,6 +62,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     private void initialiseDatabase() {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private void initialiseViews() {
@@ -70,7 +74,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     private void loadMessageList() {
         messageList = (RecyclerView) findViewById(R.id.messageList);
         messageList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MessagesAdapter();
+        adapter = new MessagesAdapter(firebaseUser, this);
         messageList.setAdapter(adapter);
     }
 
@@ -103,7 +107,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) { //for sending message button
         String message = myMessageText.getText().toString();
-        String user = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        User user = new User(firebaseUser.getEmail(), firebaseUser.getDisplayName());
 
         if(message.isEmpty()) {
             myMessageText.setError(getString(R.string.blank_field));

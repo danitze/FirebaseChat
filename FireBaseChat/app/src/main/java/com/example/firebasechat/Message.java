@@ -1,13 +1,15 @@
 package com.example.firebasechat;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.Date;
 
 public class Message {
     private String messageText;
-    private String messageUser;
+    private User messageUser;
     private long messageTime;
 
-    public Message(String messageText, String messageUser) {
+    public Message(String messageText, User messageUser) {
         this.messageText = messageText;
         this.messageUser = messageUser;
 
@@ -25,11 +27,11 @@ public class Message {
         this.messageText = messageText;
     }
 
-    public String getMessageUser() {
+    public User getMessageUser() {
         return messageUser;
     }
 
-    public void setMessageUser(String messageUser) {
+    public void setMessageUser(User messageUser) {
         this.messageUser = messageUser;
     }
 

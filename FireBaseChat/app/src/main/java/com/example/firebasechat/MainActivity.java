@@ -138,13 +138,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editTextEmailAddress.setText(userData[0]);
                 editTextPassword.setText(userData[1]);
             }
-            catch (NullPointerException e) {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
         else {
             String email = getUserData();
             editTextEmailAddress.setText(email);
+        }
+    }
+
+    private void updateUserDataSaved(String email, String password) {
+        if(email == null)
+            email = "";
+        if(password == null)
+            password = "";
+        if(rememberPassword.isChecked()) {
+            saveData(USER_DATA_FILE, email + " " + password);
+        }
+        else {
+            saveData(USER_DATA_FILE, email);
         }
     }
 
@@ -169,12 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editTextPassword.requestFocus();
         }
         else {
-            if(rememberPassword.isChecked()) {
-                saveData(USER_DATA_FILE, email + " " + password);
-            }
-            else {
-                saveData(USER_DATA_FILE, email);
-            }
+            updateUserDataSaved(email, password);
             progressBar.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -197,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.promptingText:
+                updateUserDataSaved(editTextEmailAddress.getText().toString(), editTextPassword.getText().toString());
                 Intent intent = new Intent(MainActivity.this, EmailSignUpActivity.class);
                 startActivity(intent);
                 break;
