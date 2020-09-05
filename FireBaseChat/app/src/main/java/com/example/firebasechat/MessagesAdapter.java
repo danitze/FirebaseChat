@@ -71,9 +71,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         public void bind(Message message) {
             if(message.getMessageUser().getEmail().equals(firebaseUser.getEmail())) {
                 messageLayout.setBackground(context.getDrawable(R.drawable.background_my_message));
-                nameText.setTextColor(context.getColor(R.color.myMessageTextColor));
-                dateText.setTextColor(context.getColor(R.color.myMessageTextColor));
-                messageText.setTextColor(context.getColor(R.color.colorBlack));
+                nameText.setTextColor(context.getColor(R.color.text_color));
+                dateText.setTextColor(context.getColor(R.color.text_color));
+                messageText.setTextColor(context.getColor(R.color.colorWhite));
             }
 
             messageText.setText(message.getMessageText());
